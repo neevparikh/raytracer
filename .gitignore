@@ -32,3 +32,5 @@
 *.app
 
 build/
+tmp_output/
+compile_commands.json
