@@ -3,8 +3,15 @@ cmake_minimum_required(VERSION 3.15)
 # set the project name
 project(raytracer)
 
-set(SOURCES ./src/raytracer.cpp ./src/colors.cpp 
-            ./src/geometery.cpp ./src/camera.cpp)
+set(SOURCES 
+    ./src/main.cpp
+    ./src/raytracer.cpp
+    ./src/colors.cpp
+    ./src/geometery.cpp
+    ./src/camera.cpp
+    ./src/scene.cpp
+)
+
 include_directories(./include)
 
 # specify the C++ standard

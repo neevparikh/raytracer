@@ -1,19 +1,39 @@
 #pragma once
 #include <eigen3/Eigen/Dense>
+#include <yaml-cpp/yaml.h>
 
+namespace raytracer {
 using Point = Eigen::Vector3f;
+using Vector = Eigen::Vector3f;
 
-class Ray {
-  public:
-    // constructor
-    Ray(const Point &orig, const Eigen::Vector3f &direction) {
-      origin = orig;
-      dir = direction.normalized();
-    };
+struct Ray {
+  // constructor
+  Ray(const Point &orig, const Vector &direction) {
+    origin = orig;
+    dir = direction.normalized();
+  };
 
-    Point at(double t) const;  
+  Point at(double t) const;
 
-  private:
-    Point origin;
-    Eigen::Vector3f dir;
+  Point origin;
+  Vector dir;
 };
+
+struct Shape {
+  virtual bool hits(const Ray &r) const = 0;
+  virtual ~Shape() = default;
+};
+
+struct Sphere : public Shape {
+  Sphere(const double r, const Point &c) {
+    radius = r;
+    center = c;
+  };
+  double radius;
+  Point center;
+
+  bool hits(const Ray &r) const;
+};
+
+std::unique_ptr<Shape> get_shape(YAML::Node cfg);
+}; // namespace raytracer
