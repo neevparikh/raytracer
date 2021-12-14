@@ -6,10 +6,12 @@
 #include <fstream>
 #include <iostream>
 #include <memory>
+#include <cmath>
 #include <string>
 #include <yaml-cpp/yaml.h>
 
 namespace raytracer {
+
 void render(std::string config_filepath) {
 
   try {
@@ -21,19 +23,18 @@ void render(std::string config_filepath) {
     img.open(scn.img.filename, std::ios::out);
     img << "P3\n" << xres << ' ' << yres << "\n255\n";
 
-    for (int j = yres; j >= 0; --j) {
+    for (int j = 0; j < yres; ++j) {
       for (int i = 0; i < xres; ++i) {
-        auto u = static_cast<double>(i) / (xres - 1);
-        auto v = static_cast<double>(j) / (yres - 1);
-        Color c = {0.1, v, u};
-
-        Vector d = scn.camera.bottom_left + u * scn.camera.viewport_x +
-                   v * scn.camera.viewport_y - scn.camera.origin;
-        Ray r = Ray{scn.camera.origin, d};
+        Vector d = scn.camera.pixel_to_world_space(i, j);
+        Ray r = Ray{scn.camera.location, d};
+        Color c = scn.background(i, j);
 
         for (auto &shp : scn.shapes) {
-          if (shp->hits(r)) {
-            c = {0.5, 0, 0};
+          // TODO only render the one with smallest t
+          auto t = shp->intersection(r);
+          if (t > 0) {
+            auto n = shp->get_normal(r.at(t));
+            c = (shp->material_color + Vector{1, 1, 1}) * std::max(static_cast<double>(n.dot(d)), 0.0) ;
           };
         };
 
