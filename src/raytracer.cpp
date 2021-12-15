@@ -34,7 +34,7 @@ void render(std::string config_filepath) {
           auto t = shp->intersection(r);
           if (t > 0) {
             auto n = shp->get_normal(r.at(t));
-            c = (shp->material_color + Vector{1, 1, 1}) * std::max(static_cast<double>(n.dot(d)), 0.0) ;
+            c = (shp->material_color) * std::max(static_cast<double>(n.dot(-r.dir)), 0.0);
           };
         };
 
