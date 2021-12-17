@@ -3,4 +3,4 @@
 ./scripts/setup.sh
 cd build/release
 cmake -DCMAKE_BUILD_TYPE=Release ../..
-make
+make -j8

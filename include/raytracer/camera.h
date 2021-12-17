@@ -31,7 +31,7 @@ struct Camera {
                                    (img_y / 2) * axis_v -
                                    ((img_y / 2) / tan(fov / 2)) * axis_w;
 
-  const Vector pixel_to_world_space(int x, int y);
+  const Vector pixel_to_world_space(float x, float y);
   const Vector camera_vec_to_world(const Vector &v);
 
 private:

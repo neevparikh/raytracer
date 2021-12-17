@@ -1,6 +1,7 @@
 #include "raytracer/scene.h"
 #include "raytracer/camera.h"
 #include "raytracer/colors.h"
+#include "raytracer/raytracer.h"
 #include "raytracer/utils.h"
 #include <iostream>
 #include <string>
@@ -42,6 +43,7 @@ Scene load_scene(std::string config_filename) {
       .shapes = std::move(shapes),
       .camera = cam,
       .img = img,
+      .config = config,
   };
   return scn;
 };
@@ -49,8 +51,8 @@ Scene load_scene(std::string config_filename) {
 Color Scene::background(int x, int y) {
   auto w = camera.img_x;
   auto h = camera.img_y;
-  auto a = static_cast<double>(x) - w / 2;
-  auto b = static_cast<double>(y) - (h * 5.65);
+  auto a = static_cast<float>(x) - w / 2;
+  auto b = static_cast<float>(y) - (h * 5.65);
   auto r = 5 * h;
   Color c;
   if (a * a + b * b < r * r) {

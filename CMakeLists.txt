@@ -28,6 +28,10 @@ add_executable(raytracer ${SOURCES})
 find_package(Eigen3 3.4 REQUIRED NO_MODULE)
 target_link_libraries(raytracer Eigen3::Eigen)
 
+# OpenMP for multiprocessing
+find_package(OpenMP REQUIRED)
+target_link_libraries(raytracer OpenMP::OpenMP_CXX)
+
 # yaml-cpp for config files
 find_package(yaml-cpp REQUIRED)
 target_link_libraries(raytracer yaml-cpp)

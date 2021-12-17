@@ -5,9 +5,8 @@
 
 namespace raytracer {
 
-const Vector Camera::pixel_to_world_space(int x, int y) {
-  Vector v = static_cast<float>(x) * axis_u - static_cast<float>(y) * axis_v +
-             pixel_to_camera_w;
+const Vector Camera::pixel_to_world_space(float x, float y) {
+  Vector v = x * axis_u - y * axis_v + pixel_to_camera_w;
   return v;
 };
 

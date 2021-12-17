@@ -15,29 +15,27 @@ struct Ray {
     dir = direction.normalized();
   };
 
-  Point at(double t) const;
+  Point at(float t) const;
 
   Point origin;
   Vector dir;
 };
 
 struct Shape {
-  Color material_color;
-  virtual double intersection(const Ray &r) const = 0;
+  const Color material_color;
+  virtual float intersection(const Ray &r) const = 0;
   virtual Vector get_normal(const Point &intersection_pt) const = 0;
   virtual ~Shape() = default;
 };
 
-struct Sphere : public Shape {
-  Sphere(const double r, const Point &c, const Color &color) {
-    radius = r;
-    center = c;
-    material_color = color;
-  };
-  double radius;
-  Point center;
+struct Sphere : public virtual Shape {
+  Sphere(const float r, const Point &c, const Color &color)
+      : radius{r}, center{c}, material_color{color} {};
+  const float radius;
+  const Point center;
+  const Color material_color;
 
-  double intersection(const Ray &r) const override;
+  float intersection(const Ray &r) const override;
   Vector get_normal(const Point &intersection_pt) const override;
 };
 

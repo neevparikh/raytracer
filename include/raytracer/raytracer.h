@@ -4,4 +4,5 @@
 
 namespace raytracer {
 void render(std::string filepath);
+
 }; // namespace raytracer
