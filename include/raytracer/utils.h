@@ -18,7 +18,7 @@ template <> struct convert<Eigen::Vector3f> {
     if (!node.IsSequence() || node.size() != 3) {
       return false;
     }
-    v << node[0].as<float>(), node[1].as<float>(), node[2].as<float>();
+    v << node[0].as<double>(), node[1].as<double>(), node[2].as<double>();
     return true;
   }
 };

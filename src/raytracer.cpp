@@ -34,7 +34,8 @@ void render(std::string config_filepath) {
 
     Random rng = Random{};
 
-    Color colors[xres][yres];
+    auto colors = std::make_unique<Color[]>(xres * yres);
+
 #pragma omp parallel for collapse(2) schedule(dynamic) if (multiprocessing)
     for (int j = 0; j < yres; ++j) {
       for (int i = 0; i < xres; ++i) {
@@ -50,15 +51,23 @@ void render(std::string config_filepath) {
                 scn.shapes.begin(), scn.shapes.end(),
                 [r](const std::unique_ptr<Shape> &shp1,
                     const std::unique_ptr<Shape> &shp2) -> bool {
-                  return shp1->intersection(r) < shp2->intersection(r);
+                  auto t1 = shp1->intersection(r);
+                  auto t2 = shp2->intersection(r);
+                  if (t1 and t2) {
+                    return t1 < t2;
+                  } else if (t1 and !t2) {
+                    return true;
+                  } else {
+                    return false;
+                  }
                 });
 
             auto closest_shp = (*closest_shp_iterator).get();
             assert(closest_shp);
 
-            if (auto t = closest_shp->intersection(r); t > 0) {
-              auto n = closest_shp->get_normal(r.at(t));
-              c += (closest_shp->material_color) *
+            if (auto t = closest_shp->intersection(r); t) {
+              auto n = closest_shp->get_normal(r.at(t.value()));
+              c += closest_shp->get_material_properties() *
                    std::max(static_cast<float>(n.dot(-r.dir)), 0.0f);
             } else {
               c += scn.background(i, j);
@@ -66,12 +75,12 @@ void render(std::string config_filepath) {
           }
         }
         c /= aa_num_samples;
-        colors[i][j] = c;
+        colors[j * xres + i] = c;
       }
     }
     for (int j = 0; j < yres; ++j) {
       for (int i = 0; i < xres; ++i) {
-        write_color_to_file(img, convert_color_to_255(colors[i][j]));
+        write_color_to_file(img, convert_color_to_255(colors[j * xres + i]));
       }
     }
     img.close();

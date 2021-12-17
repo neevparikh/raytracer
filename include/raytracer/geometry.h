@@ -1,6 +1,7 @@
 #pragma once
 #include "raytracer/colors.h"
 #include <eigen3/Eigen/Dense>
+#include <optional>
 #include <yaml-cpp/yaml.h>
 
 namespace raytracer {
@@ -22,9 +23,9 @@ struct Ray {
 };
 
 struct Shape {
-  const Color material_color;
-  virtual float intersection(const Ray &r) const = 0;
-  virtual Vector get_normal(const Point &intersection_pt) const = 0;
+  virtual std::optional<float> intersection(const Ray &r) const = 0;
+  virtual const Vector get_normal(const Point &intersection_pt) const = 0;
+  virtual const Color &get_material_properties() const = 0;
   virtual ~Shape() = default;
 };
 
@@ -35,8 +36,11 @@ struct Sphere : public virtual Shape {
   const Point center;
   const Color material_color;
 
-  float intersection(const Ray &r) const override;
-  Vector get_normal(const Point &intersection_pt) const override;
+  std::optional<float> intersection(const Ray &r) const override;
+  const Vector get_normal(const Point &intersection_pt) const override;
+  const Color &get_material_properties() const override {
+    return material_color;
+  };
 };
 
 std::unique_ptr<Shape> get_shape(YAML::Node cfg);
