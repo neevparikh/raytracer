@@ -6,21 +6,37 @@ scene:
       color: [1.0, 0.0, 0.0]
     - name: sphere
       radius: 0.5
-      center: [1, 1, 0.5]
+      center: [0.9, 0.9, 0.5]
       color: [0.0, 0.0, 1.0]
+    - name: sphere
+      radius: 0.2
+      center: [-1.6, 1.2, 0.5]
+      color: [0.0, 1.0, 0.0]
+    - name: sphere
+      radius: 4
+      center: [0, 0, -10]
+      color: [0.098, 0.098, 0.44]
+    - name: sphere
+      radius: 0.4
+      center: [-2, -2, 0.5]
+      color: [0.2, 0.8, 0.2]
+    - name: sphere
+      radius: 0.3
+      center: [1.6, -1.2, 0.5]
+      color: [0.8, 0.4, 0.56]
 
 
 image: 
   filename: "tmp_output/image.ppm"
-  xres: 1920
-  yres: 1080
+  xres: 1280
+  yres: 720
 
 camera:
-  fov: 40
+  fov: 20
   roll: 0
   direction: [0, 0, -1] # direction camera points towards
-  location: [0, 0, 5]
+  location: [0, 0, 20]
 
 performance:
-  antialiasing_samples: 9
+  antialiasing_samples: 4
   multiprocessing: true

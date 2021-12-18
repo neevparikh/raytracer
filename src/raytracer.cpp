@@ -32,7 +32,7 @@ void render(std::string config_filepath) {
     bool multiprocessing =
         scn.config["performance"]["multiprocessing"].as<bool>();
 
-    Random rng = Random{};
+    Random rng = scn.rng;
 
     auto colors = std::make_unique<Color[]>(xres * yres);
 

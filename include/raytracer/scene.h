@@ -3,6 +3,7 @@
 #include "raytracer/colors.h"
 #include "raytracer/geometry.h"
 #include "raytracer/raytracer.h"
+#include "raytracer/utils.h"
 #include <eigen3/Eigen/Dense>
 #include <functional>
 #include <string>
@@ -20,6 +21,7 @@ struct Scene {
   Camera camera;
   Image img;
   YAML::Node config;
+  Random rng = Random{};
 
   Color background(int x, int j);
 };

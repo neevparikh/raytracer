@@ -8,12 +8,19 @@ namespace raytracer {
 struct Camera {
 
   // from config
+
+  Camera(const float img_x, const float img_y, const float fov_degrees,
+         const float roll_degrees, const Point location, const Vector direction)
+      : img_x{img_x}, img_y{img_y}, fov_degrees{fov_degrees},
+        roll_degrees{roll_degrees}, location{location},
+        direction{direction.normalized()} {};
+
   const float img_x;
   const float img_y;
   const float fov_degrees;
   const float roll_degrees;
   const Point location;
-  const Vector direction = direction.normalized();
+  const Vector direction;
 
   const float aspect_ratio = img_x / img_y;
 
