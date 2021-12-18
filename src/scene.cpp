@@ -51,16 +51,6 @@ Scene load_scene(std::string config_filename) {
 Color Scene::background(int x, int y) {
   auto w = camera.img_x;
   auto h = camera.img_y;
-  /* auto a = static_cast<float>(x) - w / 2; */
-  /* auto b = static_cast<float>(y) - (h * 5.65); */
-  /* auto r = 5 * h; */
-  /* Color c; */
-  /* if (a * a + b * b < r * r) { */
-  /*   c = Color{0.8, 1, 0.8}; */
-  /* } else { */
-  /*   c = Color{0.8, 0.8, 1}; */
-  /* } */
-  /* return c; */
   auto l = [](float a, float b) {
     return 1 - pow((std::abs(static_cast<float>(a) - (b / 2)) / (b / 2)), 0.9);
   };
