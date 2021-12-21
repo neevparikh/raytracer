@@ -1,6 +1,7 @@
 #include "raytracer/scene.h"
 #include "raytracer/camera.h"
 #include "raytracer/colors.h"
+#include "raytracer/lights.h"
 #include "raytracer/raytracer.h"
 #include "raytracer/utils.h"
 #include <iostream>
@@ -8,6 +9,14 @@
 #include <yaml-cpp/yaml.h>
 
 namespace raytracer {
+
+std::unique_ptr<Light> get_light(const YAML::Node cfg) {
+  if (cfg["name"] == "point") {
+  }
+  elif (cfg["name"] == "directional") {}
+  else {};
+};
+
 Scene load_scene(std::string config_filename) {
   YAML::Node config = YAML::LoadFile(config_filename);
 
@@ -39,6 +48,16 @@ Scene load_scene(std::string config_filename) {
     shapes.push_back(std::move(p));
   }
 
+  std::vector<std::unique_ptr<Light>> lights;
+
+  YAML::Node light_names = config["scene"]["lights"];
+
+  assert(light_names.IsSequence());
+  for (auto name : light_names) {
+    auto p = get_light(name);
+    shapes.push_back(std::move(p));
+  }
+
   Scene scn = Scene{
       .shapes = std::move(shapes),
       .camera = cam,
@@ -51,14 +70,17 @@ Scene load_scene(std::string config_filename) {
 Color Scene::background(int x, int y) {
   auto w = camera.img_x;
   auto h = camera.img_y;
-  auto l = [](float a, float b) {
-    return 1 - pow((std::abs(static_cast<float>(a) - (b / 2)) / (b / 2)), 0.9);
+  auto m = std::min(w, h);
+  auto l = [m](float a, float b) {
+    return 1 - pow((std::min(std::abs(static_cast<float>(a) - (b / 2)), m / 2) /
+                    (m / 2)),
+                   0.3);
   };
   if (rng.random_float() < 0.005) {
     return Color{0.8, 0.8, 0.85};
   } else {
     auto v = (l(x, w) + l(y, h)) / 2;
-    return 0.25 * Color{v, v, v};
+    return 0.02 * Color{v, v, v};
   };
 };
 }; // namespace raytracer

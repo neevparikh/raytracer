@@ -60,7 +60,7 @@ std::unique_ptr<Shape> get_shape(YAML::Node cfg) {
   if (s == "sphere") {
     return std::make_unique<Sphere>(Sphere{cfg["radius"].as<float>(),
                                            cfg["center"].as<Point>(),
-                                           cfg["color"].as<Color>()});
+                                           clamp(cfg["color"].as<Color>())});
   } else {
     // TODO is this error handling fine?
     throw std::runtime_error("Invalid config file");

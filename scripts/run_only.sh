@@ -1,3 +1,3 @@
 #!/usr/bin/env zsh
 
-time ./build/debug/raytracer && feh tmp_output/image.ppm
+time ./build/debug/raytracer && feh --force-aliasing tmp_output/image.ppm
