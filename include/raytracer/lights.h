@@ -8,14 +8,13 @@ namespace raytracer {
 struct Light {
   const Color color;
   const float intensity;
+  const Point location;
 };
 
 struct DirectionalLight : Light {
   const Vector direction;
 };
 
-struct PointLight : Light {
-  const Point location;
-};
+struct PointLight : Light {};
 
 }; // namespace raytracer

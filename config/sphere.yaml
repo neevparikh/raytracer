@@ -27,14 +27,15 @@ scene:
   lights:
     - name: directional
       color: [1, 1, 1]
+      intensity: 1.0
       direction: [0, 0, -22]
       location: [0, 0, 22]
 
 
 image: 
   filename: "tmp_output/image.ppm"
-  xres: 1280
-  yres: 720
+  xres: 640
+  yres: 360
 
 camera:
   fov: 20

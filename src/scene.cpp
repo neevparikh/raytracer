@@ -11,10 +11,26 @@
 namespace raytracer {
 
 std::unique_ptr<Light> get_light(const YAML::Node cfg) {
-  if (cfg["name"] == "point") {
-  }
-  elif (cfg["name"] == "directional") {}
-  else {};
+  if (cfg["name"].as<std::string>() == "point") {
+    return std::make_unique<PointLight>(PointLight{
+        {
+            cfg["color"].as<Color>(),
+            cfg["intensity"].as<float>(),
+            cfg["location"].as<Point>(),
+        },
+    });
+  } else if (cfg["name"].as<std::string>() == "directional") {
+    return std::make_unique<DirectionalLight>(DirectionalLight{
+        {
+            cfg["color"].as<Color>(),
+            cfg["intensity"].as<float>(),
+            cfg["location"].as<Point>(),
+        },
+        cfg["direction"].as<Vector>(),
+    });
+  } else {
+    throw std::runtime_error("Invalid light type in config file");
+  };
 };
 
 Scene load_scene(std::string config_filename) {
@@ -55,11 +71,12 @@ Scene load_scene(std::string config_filename) {
   assert(light_names.IsSequence());
   for (auto name : light_names) {
     auto p = get_light(name);
-    shapes.push_back(std::move(p));
+    lights.push_back(std::move(p));
   }
 
   Scene scn = Scene{
       .shapes = std::move(shapes),
+      .lights = std::move(lights),
       .camera = cam,
       .img = img,
       .config = config,
@@ -79,7 +96,7 @@ Color Scene::background(int x, int y) {
   if (rng.random_float() < 0.005) {
     return Color{0.8, 0.8, 0.85};
   } else {
-    auto v = (l(x, w) + l(y, h)) / 2;
+    float v = (l(x, w) + l(y, h)) / 2;
     return 0.02 * Color{v, v, v};
   };
 };

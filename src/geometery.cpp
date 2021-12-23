@@ -63,7 +63,7 @@ std::unique_ptr<Shape> get_shape(YAML::Node cfg) {
                                            clamp(cfg["color"].as<Color>())});
   } else {
     // TODO is this error handling fine?
-    throw std::runtime_error("Invalid config file");
+    throw std::runtime_error("Invalid shape type in config file");
   };
 };
 }; // namespace raytracer
